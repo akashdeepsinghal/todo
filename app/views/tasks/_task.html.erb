@@ -1,14 +1,19 @@
 <div class="row clearfix">
-	<div class="task">
-		<% if task.completed? %>
+	<% if task.completed? %>
+		<div class="task">
 			<p style="opacity:0.4;"><strike><%= task.content %></strike></p>
-		<% else %>
+		</div>
+		<div class="complete">
+			<%= link_to 'Mark Incomplete', incomplete_list_task_path(@list, task.id), method: :patch %>
+		</div>
+	<% else %>
+		<div class="task">
 			<p><%= task.content %></p>
-		<% end %>
-	</div>
-	<div class="complete">
-		<%= link_to 'Mark As Complete', complete_list_task_path(@list, task.id), method: :patch %>
-	</div>
+		</div>
+		<div class="incomplete">
+			<%= link_to 'Mark As Complete', complete_list_task_path(@list, task.id), method: :patch %>
+		</div>
+	<% end %>
 	<div class="trash">
 		<%= link_to 'Delete', list_task_path(@list, task.id), method: :delete, data: { confirm: 'Are you sure?' } %>
 	</div>
