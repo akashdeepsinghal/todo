@@ -1,6 +1,7 @@
 class TasksController < ApplicationController
   # before_action :set_task, only: [:show, :edit, :update, :destroy]
   before_action :set_list
+  before_action :set_task, except: [:create]
 
   # GET /tasks
   # GET /tasks.json
@@ -23,15 +24,24 @@ class TasksController < ApplicationController
   end
 
   # POST /tasks
-  # POST /tasks.json
   def create
     @task = @list.tasks.create(params[:task].permit(:content))
-
     redirect_to @list
   end
 
-  def set_list
-    @list = List.find(params[:list_id])
+  def complete
+    @task.update_attribute(:completed_at, Time.now)
+    redirect_to @list, notice: "Task completed"
+  end
+
+  # DELETE /tasks/1
+  def destroy
+    if @task.destroy
+      flash[:success] = "Task was deleted successfully"
+    else
+      flash[:error] = "Task could not be deleted"
+    end
+    redirect_to @list
   end
 
   # def create
@@ -50,39 +60,30 @@ class TasksController < ApplicationController
 
   # PATCH/PUT /tasks/1
   # PATCH/PUT /tasks/1.json
-  def update
-    respond_to do |format|
-      if @task.update(task_params)
-        format.html { redirect_to @task, notice: 'Task was successfully updated.' }
-        format.json { render :show, status: :ok, location: @task }
-      else
-        format.html { render :edit }
-        format.json { render json: @task.errors, status: :unprocessable_entity }
-      end
-    end
-  end
 
-  # DELETE /tasks/1
-  # DELETE /tasks/1.json
-  def destroy
-    @task = @list.tasks.find(params[:id])
 
-    @task.destroy
-    respond_to do |format|
-      format.html { redirect_to @list, notice: 'Task was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
+  # def update
+  #   respond_to do |format|
+  #     if @task.update(task_params)
+  #       format.html { redirect_to @task, notice: 'Task was successfully updated.' }
+  #       format.json { render :show, status: :ok, location: @task }
+  #     else
+  #       format.html { render :edit }
+  #       format.json { render json: @task.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_task
-      @task = Task.find(params[:id])
+    def set_list
+      @list = List.find(params[:list_id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    def set_task
+      @task = @list.tasks.find(params[:id])
+    end
+
     def task_params
-      # params.require(:task).permit(:content, :list_id)
       params[:task].permit(:content)
     end
 end

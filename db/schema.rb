@@ -23,8 +23,8 @@ ActiveRecord::Schema.define(version: 20160519061249) do
   create_table "tasks", force: :cascade do |t|
     t.text     "content"
     t.integer  "list_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "tasks", ["list_id"], name: "index_tasks_on_list_id"
