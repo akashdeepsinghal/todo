@@ -1,3 +1,15 @@
-<p><%= task.content %></p>
-<%= link_to 'Delete', list_task_path(@list, task.id), method: :delete, data: { confirm: 'Are you sure?' } %>
-<%= link_to 'Mark As Complete', complete_list_task_path(@list, task.id), method: :patch %>
+<div class="row clearfix">
+	<div class="task">
+		<% if task.completed? %>
+			<p style="opacity:0.4;"><strike><%= task.content %></strike></p>
+		<% else %>
+			<p><%= task.content %></p>
+		<% end %>
+	</div>
+	<div class="complete">
+		<%= link_to 'Mark As Complete', complete_list_task_path(@list, task.id), method: :patch %>
+	</div>
+	<div class="trash">
+		<%= link_to 'Delete', list_task_path(@list, task.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+	</div>
+</div>

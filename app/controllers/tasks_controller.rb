@@ -34,6 +34,11 @@ class TasksController < ApplicationController
     redirect_to @list, notice: "Task completed"
   end
 
+  def incomplete
+    @task.update_attribute(:completed_at, nil)
+    redirect_to @list, notice: "Task marked incomplete"
+  end
+
   # DELETE /tasks/1
   def destroy
     if @task.destroy
